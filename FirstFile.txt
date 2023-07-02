@@ -1,1 +1,1 @@
-My first vim-created file!
+My first vim-created file! [edit]
