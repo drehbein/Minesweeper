@@ -1,0 +1,43 @@
+Prep
+
+library(haven)
+Survey <- read_sav("2020-2021 NSCH_Topical_CAHMI_DRC.sav")
+VariablesOfInterest <- Survey[c("SC_SEX", "SC_RACE_R", "SC_HISPANIC_R", "SC_AGE_YEARS", "ScreenTime_2021", "HOURSLEEP05", "CONFIDENT")]
+rm(Survey)
+Valid <- subset.data.frame(VariablesOfInterest, SC_AGE_YEARS < 6 & CONFIDENT < 5 & !is.na(ScreenTime_2021) & HOURSLEEP05 != 99)
+rm(VariablesOfInterest)
+gc()
+apply(Valid, 2, table)
+
+ScreenXConfident
+
+ScreenXConfident <- as.matrix(table(Valid$ScreenTime_2021, Valid$CONFIDENT))
+rownames(ScreenXConfident) <- c("Less than 1 hour", "1 hour", "2 hours", "3 hours", "4 or more hours")
+colnames(ScreenXConfident) <- c("Completely confident", "Mostly confident", "Somewhat confident", "Not at all confident")
+(ScreenXConfident)
+data_percentage <- apply(ScreenXConfident, 2, function(x){x*100/sum(x,na.rm=T)})
+library(RColorBrewer)
+coul <- brewer.pal(3, "Pastel2")
+barplot(data_percentage, col=coul, border="white", xlab="group")
+
+ScreenXSleep
+
+ScreenXSleep <- as.matrix(table(Valid$ScreenTime_2021, Valid$HOURSLEEP05))
+rownames(ScreenXSleep) <- c("Less than 1 hour", "1 hour", "2 hours", "3 hours", "4 or more hours")
+colnames(ScreenXSleep) <- c("Less than 7 hours", "7 hours", "8 hours", "9 hours", "10 hours", "11 hours", "12 or more hours")
+(ScreenXSleep)
+data_percentage <- apply(ScreenXSleep, 2, function(x){x*100/sum(x,na.rm=T)})
+library(RColorBrewer)
+coul <- brewer.pal(3, "Pastel2")
+barplot(data_percentage, col=coul, border="white", xlab="group")
+
+SleepXConfident
+
+SleepXConfident <- as.matrix(table(Valid$HOURSLEEP05, Valid$CONFIDENT))
+rownames(SleepXConfident) <- c("Less than 7 hours", "7 hours", "8 hours", "9 hours", "10 hours", "11 hours", "12 or more hours")
+colnames(SleepXConfident) <- c("Completely confident", "Mostly confident", "Somewhat confident", "Not at all confident")
+(SleepXConfident)
+data_percentage <- apply(SleepXConfident, 2, function(x){x*100/sum(x,na.rm=T)})
+library(RColorBrewer)
+coul <- brewer.pal(3, "Pastel2")
+barplot(data_percentage, col=coul, border="white", xlab="group")
