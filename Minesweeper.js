@@ -24,12 +24,25 @@ function setBoard() {
 	mineLocations = cells.slice(0,mines);
 	document.getElementById("mineLocations").innerHTML = mineLocations;
 
-	// remove old boards
+	// create an array without mines
+	const gameState = [];
+	while (gameState.length < area) {
+		gameState.push("0");
+	}
+
+	// add each mine
+	for (const mineLocation of mineLocations) {
+		gameState[mineLocation - 1] = 1;
+	}
+	document.getElementById("gameState").innerHTML = gameState;
+
+
+	// remove old board
 	if (x = document.getElementById("board")) {
 		x.remove();
 	}
 
-	// create table
+	// create board
 	var board = document.createElement("TABLE");
 	board.setAttribute("id", "board");
 	document.getElementById("boardCont").appendChild(board);
@@ -37,7 +50,7 @@ function setBoard() {
 	// reset cell ticker
 	var cellCount = 1;
 
-	// add rows/columns
+	// add rows/cells
 	for (let i = 0; i < rows; i++) {
 		var row = document.createElement("TR");
 		row.setAttribute("id", "row");
