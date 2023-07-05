@@ -10,16 +10,24 @@
 <h1>Minesweeper!</h1>
 
 <label for="rows">Rows:</label><br>
-<input type="text" id="rows" name="rows" value="10"><br>
+<input type="text" id="rows" name="rows" value="3"><br>
 <label for="columns">Columns:</label><br>
-<input type="text" id="columns" name="columns" value="10"><br><br>
+<input type="text" id="columns" name="columns" value="5"><br>
+<label for="mines">Mines:</label><br>
+<input type="text" id="mines" name="mines" value="10"><br><br>
 
 <button type="button" onclick="setBoard()">Set Board</button>
 
-<p id="boardTitle">[No board title]</p>
+<p>Board title:</p>
+<p id="boardTitle">[no board title]</p>
 
-<p id="boardStats">[No board stats]</p>
+<p>Board area:</p>
+<p id="boardArea">[no board area]</p>
 
+<p>Mine locations:</p>
+<p id="mineLocations">[no mine locations]</p>
+
+<p>Board:</p>
 <div id="boardCont"></div>
 
 </body>
