@@ -10,17 +10,24 @@
 <h1>Minesweeper!</h1>
 
 <label for="rows">Rows:</label><br>
-<input type="text" id="rows" name="rows" value="3"><br>
+<input type="text" id="rows" name="rows" value="4"><br>
 <label for="columns">Columns:</label><br>
 <input type="text" id="columns" name="columns" value="5"><br>
 <label for="mines">Mines:</label><br>
-<input type="text" id="mines" name="mines" value="10"><br><br>
+<input type="text" id="mines" name="mines" value="5"><br><br>
 
 <button type="button" onclick="setBoard()">Set Board</button>
 
 <p>Board title:</p>
 <p id="boardTitle"></p>
 
+<p>Board:</p>
+<div id="boardCont"></div><br>
+
+<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+
+<div id="debugging" hidden="hidden">
+<p>Debugging:</p>
 <p>Board area:</p>
 <p id="boardArea"></p>
 
@@ -29,9 +36,7 @@
 
 <p>Game State:</p>
 <p id="gameState"></p>
-
-<p>Board:</p>
-<div id="boardCont"></div>
+</div>
 
 </body>
 </html>

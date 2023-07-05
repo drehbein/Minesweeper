@@ -32,7 +32,7 @@ function setBoard() {
 
 	// add each mine
 	for (const mineLocation of mineLocations) {
-		gameState[mineLocation - 1] = 1;
+		gameState[mineLocation - 1] = 4;
 	}
 	document.getElementById("gameState").innerHTML = gameState;
 
@@ -59,10 +59,21 @@ function setBoard() {
 		for (let j = 0; j < columns; j++) {
 			var cell = document.createElement("TD");
 			cell.setAttribute("id",`Cell ${cellCount}`); 
-			var text = document.createTextNode(`Cell ${cellCount}`);
-			cell.appendChild(text);
+			var button = document.createElement("BUTTON");
+			button.innerHTML = gameState[cellCount - 1];
+			cell.appendChild(button);
 			row.appendChild(cell);
 			cellCount++;
 		}
+	}
+}
+
+function toggleDebugging() {
+	let debugging = document.getElementById("debugging");
+	let hidden = debugging.getAttribute("hidden");
+	if (hidden) {
+		debugging.removeAttribute("hidden");
+	} else {
+		debugging.setAttribute("hidden", "hidden");
 	}
 }
