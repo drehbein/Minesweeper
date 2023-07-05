@@ -1,3 +1,4 @@
+// Initiates game
 function setBoard() {
 	// take user input
 	rows = parseInt(document.getElementById("rows").value);
@@ -39,14 +40,17 @@ function setBoard() {
 	renderBoard();
 }
 
+// Direct clicks to 'reveal' or 'flag' functions
 function clickEvent(event, cell) {
 	if (event.shiftKey) {
 		toggleFlag(cell);
 	} else {
 		reveal(cell);
 	}
+	document.getElementById("gameState").innerHTML = gameState;
 }
 
+// Flag or unflag cell
 function toggleFlag(cell) {
 	var cellState = gameState[cell];
 	if (cellState == 0 || cellState == 4) {
@@ -58,6 +62,7 @@ function toggleFlag(cell) {
 	}
 }
 
+// Reveal cell
 function reveal(cell) {
 	var cellState = gameState[cell];
 	if (cellState == 0 || cellState == 4) {
@@ -66,6 +71,7 @@ function reveal(cell) {
 	}
 }
 
+// Updates board graphic
 function renderBoard() {
 	// remove old board
 	if (x = document.getElementById("board")) {
@@ -88,11 +94,14 @@ function renderBoard() {
 
 		for (let j = 0; j < columns; j++) {
 			var cell = document.createElement("TD");
-			cell.setAttribute("id",`Cell ${cellCount}`); 
-			var button = document.createElement("BUTTON");
-			button.innerHTML = gameState[cellCount];
-			button.setAttribute("onclick", `clickEvent(event, ${cellCount})`);
-			cell.appendChild(button);
+			var imageElement = document.createElement("IMG");
+			var imageFile = imageSelector(cellCount);
+			imageElement.setAttribute("src", imageFile.src);
+			imageElement.setAttribute("style", "width:50px;height:50px;");
+			imageElement.setAttribute("alt", imageFile.alt);
+			imageElement.setAttribute("onclick", `clickEvent(event, ${cellCount})`);
+			cell.appendChild(imageElement);
+
 			row.appendChild(cell);
 			cellCount++;
 		}
@@ -100,6 +109,20 @@ function renderBoard() {
 
 }
 
+function imageSelector(cellCount) {
+	cellState = gameState[cellCount];
+	if (cellState == 0 || cellState == 4) {
+		return {src:"MinesweeperImages/hidden.png", alt:"Hidden"};
+	} else if (cellState == 2) {
+		return {src:"MinesweeperImages/empty.png", alt:"Empty"};
+	} else if (cellState == 1 || cellState == 5) {
+		return {src:"MinesweeperImages/flag.png", alt:"Flag"};
+	} else if (cellState == 6) {
+		return {src:"MinesweeperImages/bomb.png", alt:"Mine"};
+	}
+}
+
+// Toggles debugging information
 function toggleDebugging() {
 	let debugging = document.getElementById("debugging");
 	let hidden = debugging.getAttribute("hidden");
@@ -110,6 +133,7 @@ function toggleDebugging() {
 	}
 }
 
+// Debugging button
 function test() {
 	reveal(1);
 }
