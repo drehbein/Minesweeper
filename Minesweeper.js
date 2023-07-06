@@ -10,8 +10,8 @@ function setBoard() {
 	if (rows < 1 || columns < 1 || mines < 1) {
 		alert("There must be at least one rows, column, and mine");
 		return;
-	} else if (mines > area) {
-		alert("Mine quantity must be less than the total area");
+	} else if (mines > area - 9) {
+		alert("Mine quantity must be at least 9 less than the total area");
 		return;
 	} else if (area > 2000) {
 		alert("Area must be 2000 cells or less");
@@ -26,15 +26,6 @@ function setBoard() {
 	flagged = 0;
 	startTimer();
 
-	// generate mine locations
-	mineLocations = new Map();
-	while (mineLocations.size < mines) {
-		var randomLocation = Math.floor(Math.random() * area);
-		mineLocations.set(randomLocation, true);
-	}
-	mineLocations = Array.from(mineLocations.keys());
-	document.getElementById("mineLocations").innerHTML = "Location of " + mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
-
 	// create an array without mines
 	gameState = null;
 	gameState = {};
@@ -46,8 +37,29 @@ function setBoard() {
 			Flagged:false,
 			Borders:labelBorders(i)
 		};
-
 	}
+
+	gameOver = false;
+	renderBoard();
+	document.getElementById("game").removeAttribute("hidden");
+}
+
+// Assign mine locations
+function assignMineLocations (cellLocation) {
+	
+	// count adjacent cells
+	var guaranteedEmpty = adjacentCellIdentifier(cellLocation);
+
+	// generate mine locations
+	mineLocations = new Map();
+	while (mineLocations.size < mines) {
+		var randomLocation = Math.floor(Math.random() * area);
+		if (!guaranteedEmpty.includes(randomLocation) && cellLocation !== randomLocation) {
+			mineLocations.set(randomLocation, true);
+		}
+	}
+	mineLocations = Array.from(mineLocations.keys());
+	document.getElementById("mineLocationsDebug").innerHTML = "Location of " + mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
 
 	// add each mine
 	for (const mineLocation of mineLocations) {
@@ -65,10 +77,6 @@ function setBoard() {
 		});
 		gameState[i]["Adjacent"] = adjacentMines.length;
 	}
-
-	gameOver = false;
-	renderBoard();
-	document.getElementById("game").removeAttribute("hidden");
 }
 
 // Assemble adjacent cells; reading order from top-left
@@ -121,7 +129,7 @@ function blankClusterIdentifier(starterCell) {
 		blankCluster.push(...adjacentCellIdentifier(parseInt(knownBlank)));
 	}
 	blankCluster = [...new Set(blankCluster)];
-	
+
 	return blankCluster;
 }
 
@@ -146,53 +154,55 @@ function labelBorders(cell) {
 // Handle 'reveal' or 'flag' clicks
 function clickEvent(event, cellLocation) {
 	var cell = gameState[cellLocation];
-	if (gameOver === true) {
+	if (typeof mineLocations == 'undefined') {
+		assignMineLocations(cellLocation);
+	}
+	if (gameOver) {
 		return;
-	} else if (event.shiftKey && cell.Hidden === true) {
-		if (cell.Flagged === true) {
-			cell.Flagged = false;
-			flagged--;
-		} else if (cell.Hidden === true) {
-			cell.Flagged = true;
-			flagged++;
-		}
-	} else if (cell.Flagged === false) {
-		if (cell.Mine === true) {
-			gameOver = true;
-			cell.Hidden = false;
-			clearInterval(timer);
-			renderBoard();
-			setTimeout(() => {
-				alert("Game over, you lose!");
-			}, 0);
-			return;
-		} else if (cell.Adjacent !== 0) {
-			if (cell.Hidden === true) {
-				cell.Hidden = false;
+	}
+	if (event.shiftKey && cell.Hidden) {
+		cell.Flagged = !cell.Flagged;
+		flagged += cell.Flagged ? 1 : -1;
+		renderBoard();
+		return;
+	}
+	if (cell.Flagged || !cell.Hidden) {
+		return;
+	}
+	if (cell.Mine) {
+		gameOver = true;
+		cell.Hidden = false;
+		clearInterval(timer);
+		renderBoard();
+		setTimeout(() => {
+			alert("Game over, you lose!");
+		}, 100);
+		return;
+	}
+	if (cell.Adjacent !== 0) {
+		cell.Hidden = false;
+		revealed++;
+	} else {
+		const blankCluster = blankClusterIdentifier(cell.Location);
+		for (const cell in blankCluster) {
+			if (gameState[blankCluster[cell]].Hidden && !gameState[blankCluster[cell]].Flagged) {
+				gameState[blankCluster[cell]].Hidden = false;
 				revealed++;
 			}
-		} else {
-			blankCluster = blankClusterIdentifier(cell.Location);
-			for (const cell in blankCluster) {
-				if (gameState[blankCluster[cell]].Hidden === true) {
-					gameState[blankCluster[cell]].Hidden = false;
-					revealed++;
-				}
-			}
 		}
-		if (revealed >= area - mines) {
-			gameOver = true;
-			for (const mineLocation of mineLocations) {
-				gameState[mineLocation].Flagged = true;
-				flagged++;
-			}
-			clearInterval(timer);
-			renderBoard();
-			setTimeout(() => {
-				alert("Game over, you win!");
-			}, 0);
-			return;
+	}
+	if (revealed >= area - mines) {
+		gameOver = true;
+		for (const mineLocation of mineLocations) {
+			gameState[mineLocation].Flagged = true;
+			flagged++;
 		}
+		clearInterval(timer);
+		renderBoard();
+		setTimeout(() => {
+			alert("Game over, you win!");
+		}, 100);
+		return;
 	}
 	renderBoard();
 }
