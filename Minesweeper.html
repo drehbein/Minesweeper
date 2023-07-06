@@ -2,35 +2,43 @@
 <html>
 
 <head>
-<script src="Minesweeper.js"></script>
+	<title>Minesweeper</title>
+	<script src="Minesweeper.js"></script>
 </head>
 
 <body>
 
-<h1>Minesweeper!</h1>
+	<div id="setup"
+		<label for="rows">Rows:</label><br>
+		<input type="text" id="rows" name="rows" value="9"><br>
+		<label for="columns">Columns:</label><br>
+		<input type="text" id="columns" name="columns" value="9"><br>
+		<label for="mines">Mines:</label><br>
+		<input type="text" id="mines" name="mines" value="10"><br><br>
 
-<label for="rows">Rows:</label><br>
-<input type="text" id="rows" name="rows" value="9"><br>
-<label for="columns">Columns:</label><br>
-<input type="text" id="columns" name="columns" value="9"><br>
-<label for="mines">Mines:</label><br>
-<input type="text" id="mines" name="mines" value="10"><br><br>
+		<button type="button" onclick="setBoard()">Start Game</button>
+	</div>
 
-<button type="button" onclick="setBoard()">Set Board</button>
+	<div id="game" hidden="hidden">
+		<p id="revealed"></p>
 
-<p id="revealed"></p>
+		<p id="flagged"></p>
 
-<p>Board:</p>
-<div id="boardCont"></div><br>
+		<p id="timer"></p>
 
-<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+		<div id="boardCont"></div><br>
 
-<div id="debugging" hidden="hidden">
-<p id="mineLocations"></p>
+		<button type="button" onclick="restart()">Restart</button>
+	</div>
 
-<button type="button" onclick="test()">Test</button>
-<p id="test"></p>
-</div>
+	<br><button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+
+	<div id="debugging" hidden="hidden">
+		<p id="mineLocations"></p>
+
+		<button type="button" onclick="test()">Test</button>
+		<p id="test"></p>
+	</div>
 
 </body>
 </html>
