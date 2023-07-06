@@ -104,33 +104,8 @@ function adjacentCellIdentifier (cellLocation) {
 			}
 		}
 	}
+
 	return adjacentCells;
-}
-
-// Identifies blank clusters and cells adjacent
-function blankClusterIdentifier(starterCell) {
-	var newBlanks = [starterCell];
-	var knownBlanks = {};
-
-	while (newBlanks.length > Object.keys(knownBlanks).length) {
-		newBlanks.forEach(cell => knownBlanks[cell] = true);
-		for (const knownBlank in knownBlanks) {
-			var adjacentCells = adjacentCellIdentifier(parseInt(knownBlank));
-			newBlanks.push(...adjacentCells);
-			newBlanks = [...new Set(newBlanks)];
-			newBlanks = newBlanks.filter(function (cellLocation) {
-				return(gameState[cellLocation].Adjacent === 0);
-			});
-		}
-	}
-
-	var blankCluster = [starterCell];
-	for (const knownBlank in knownBlanks) {
-		blankCluster.push(...adjacentCellIdentifier(parseInt(knownBlank)));
-	}
-	blankCluster = [...new Set(blankCluster)];
-
-	return blankCluster;
 }
 
 // Return border labels
@@ -154,9 +129,6 @@ function labelBorders(cell) {
 // Handle 'reveal' or 'flag' clicks
 function clickEvent(event, cellLocation) {
 	var cell = gameState[cellLocation];
-	if (typeof mineLocations == 'undefined') {
-		assignMineLocations(cellLocation);
-	}
 	if (gameOver) {
 		return;
 	}
@@ -169,6 +141,9 @@ function clickEvent(event, cellLocation) {
 	if (cell.Flagged || !cell.Hidden) {
 		return;
 	}
+	if (typeof mineLocations == 'undefined') {
+		assignMineLocations(cellLocation);
+	}
 	if (cell.Mine) {
 		gameOver = true;
 		cell.Hidden = false;
@@ -179,18 +154,43 @@ function clickEvent(event, cellLocation) {
 		}, 100);
 		return;
 	}
-	if (cell.Adjacent !== 0) {
-		cell.Hidden = false;
+
+	revealEmpty(cell);
+
+	checkWin();
+}
+
+// Reveal empty cell clusters
+function revealEmpty(cell) {
+	if (!cell.Hidden) {
+		return;
+	}
+
+	const stack = [cell];
+	const visited = new Set();
+	while (stack.length > 0) {
+		const currentCell = stack.pop();
+		if (visited.has(currentCell)) {
+			continue;
+		}
+
+		visited.add(currentCell);
+		currentCell.Hidden = false;
 		revealed++;
-	} else {
-		const blankCluster = blankClusterIdentifier(cell.Location);
-		for (const cell in blankCluster) {
-			if (gameState[blankCluster[cell]].Hidden && !gameState[blankCluster[cell]].Flagged) {
-				gameState[blankCluster[cell]].Hidden = false;
-				revealed++;
+		if (currentCell.Adjacent === 0) {
+			const adjacentCells = adjacentCellIdentifier(currentCell.Location);
+			for (const cellLocation of adjacentCells) {
+				const adjacentCell = gameState[cellLocation];
+				if (adjacentCell.Hidden && !adjacentCell.Flagged) {
+					stack.push(adjacentCell);
+				}
 			}
 		}
 	}
+}
+
+// check win condition
+function checkWin() {
 	if (revealed >= area - mines) {
 		gameOver = true;
 		for (const mineLocation of mineLocations) {
@@ -203,8 +203,9 @@ function clickEvent(event, cellLocation) {
 			alert("Game over, you win!");
 		}, 100);
 		return;
+	} else {
+		renderBoard();
 	}
-	renderBoard();
 }
 
 // Updates board graphic
