@@ -27,24 +27,26 @@ function setBoard() {
 	startTimer();
 
 	// generate mine locations
-	mineLocations = new Set();
+	mineLocations = new Map();
 	while (mineLocations.size < mines) {
 		var randomLocation = Math.floor(Math.random() * area);
-		mineLocations.add(randomLocation);
+		mineLocations.set(randomLocation, true);
 	}
-	mineLocations = Array.from(mineLocations);
-	document.getElementById("mineLocations").innerHTML = "Location of " + mines + " mines: " + mineLocations;
+	mineLocations = Array.from(mineLocations.keys());
+	document.getElementById("mineLocations").innerHTML = "Location of " + mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
 
 	// create an array without mines
-	gameState = [];
-	while (gameState.length < area) {
-		gameState.push({
-			Location:gameState.length,
+	gameState = null;
+	gameState = {};
+	for (var i = 0; i < area; i++) {
+		gameState[i] = {
+			Location:i,
 			Mine:false,
 			Hidden:true,
 			Flagged:false,
-			Borders:labelBorders(gameState.length)
-		});
+			Borders:labelBorders(i)
+		};
+
 	}
 
 	// add each mine
@@ -52,20 +54,16 @@ function setBoard() {
 		gameState[mineLocation].Mine = true;
 	}
 
-	// Identify empty spaces
-	const emptySpaces = gameState.filter(function (cell) {
-		return(cell.Mine == false);
-	});
 
 	// Assign adjacent mine count to each empty space
-	for (const emptySpace of emptySpaces) {
-		var adjacentCells = adjacentCellIdentifier(emptySpace.Location);
+	for (var i = 0; i < area; i++) {
+		var adjacentCells = adjacentCellIdentifier(i);
 
 		// Filter for adjacent mines
-		var adjacentMines = adjacentCells.filter(function (cellLocation) {
-			return(gameState[cellLocation].Mine == true);
+		var adjacentMines = adjacentCells.filter(function (i) {
+			return(gameState[i]["Mine"] === true);
 		});
-		emptySpace.Adjacent = adjacentMines.length;
+		gameState[i]["Adjacent"] = adjacentMines.length;
 	}
 
 	gameOver = false;
@@ -80,15 +78,17 @@ function adjacentCellIdentifier (cellLocation) {
 
 	var adjacentCells = [];
 
-	for (var rowOffset of offsets) {
-		for (var colOffset of offsets) {
+	for (var i = 0; i < offsets.length; i++) {
+		for (var j = 0; j < offsets.length; j++) {
+			var rowOffset = offsets[i];
+			var colOffset = offsets[j];
 			if (rowOffset === 0 && colOffset === 0) {
 				// Skip the current cell
 				continue;
 			}
 
-			var newRow = Math.floor(cell.Location / columns) + rowOffset;
-			var newCol = (cell.Location % columns) + colOffset;
+			var newRow = Math.floor(cellLocation / columns) + rowOffset;
+			var newCol = (cellLocation % columns) + colOffset;
 
 			if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
 				var adjacentCellLocation = newRow * columns + newCol;
@@ -96,31 +96,32 @@ function adjacentCellIdentifier (cellLocation) {
 			}
 		}
 	}
-
 	return adjacentCells;
 }
 
 // Identifies blank clusters and cells adjacent
 function blankClusterIdentifier(starterCell) {
 	var newBlanks = [starterCell];
-	var knownBlanks = [];
-	while (newBlanks.length > knownBlanks.length) {
-		knownBlanks.push(...newBlanks);
-		knownBlanks = [...new Set(knownBlanks)];
-		for (const knownBlank of knownBlanks) {
-			var adjacentCells = adjacentCellIdentifier(knownBlank); //working
+	var knownBlanks = {};
+
+	while (newBlanks.length > Object.keys(knownBlanks).length) {
+		newBlanks.forEach(cell => knownBlanks[cell] = true);
+		for (const knownBlank in knownBlanks) {
+			var adjacentCells = adjacentCellIdentifier(parseInt(knownBlank));
 			newBlanks.push(...adjacentCells);
 			newBlanks = [...new Set(newBlanks)];
 			newBlanks = newBlanks.filter(function (cellLocation) {
-				return(gameState[cellLocation].Adjacent == 0);
+				return(gameState[cellLocation].Adjacent === 0);
 			});
 		}
 	}
-	var blankCluster = [];
-	for (const knownBlank of knownBlanks) {
-		blankCluster.push(...adjacentCellIdentifier(knownBlank));
+
+	var blankCluster = [starterCell];
+	for (const knownBlank in knownBlanks) {
+		blankCluster.push(...adjacentCellIdentifier(parseInt(knownBlank)));
 	}
 	blankCluster = [...new Set(blankCluster)];
+	
 	return blankCluster;
 }
 
@@ -130,48 +131,50 @@ function labelBorders(cell) {
 	if (cell < columns) {
 		borders.top = true;
 	}
-	if ((cell + 1) % columns == 0) {
+	if ((cell + 1) % columns === 0) {
 		borders.right = true;
 	}
 	if (cell + 1 > columns * (rows - 1)) {
 		borders.bottom = true;
 	}
-	if (cell % columns == 0) {
+	if (cell % columns === 0) {
 		borders.left = true;
 	}
 	return borders;
 }
 
 // Handle 'reveal' or 'flag' clicks
-function clickEvent(event, cell) {
-	if (gameOver == true) {
+function clickEvent(event, cellLocation) {
+	var cell = gameState[cellLocation];
+	if (gameOver === true) {
 		return;
-	} else if (event.shiftKey && gameState[cell].Hidden == true) {
-		var cellState = gameState[cell];
-		if (cellState.Flagged == true) {
-			gameState[cell].Flagged = false;
+	} else if (event.shiftKey && cell.Hidden === true) {
+		if (cell.Flagged === true) {
+			cell.Flagged = false;
 			flagged--;
-		} else if (cellState.Hidden == true) {
-			gameState[cell].Flagged = true;
+		} else if (cell.Hidden === true) {
+			cell.Flagged = true;
 			flagged++;
 		}
-	} else if (gameState[cell].Flagged == false) {
-		if (gameState[cell].Mine == true) {
+	} else if (cell.Flagged === false) {
+		if (cell.Mine === true) {
 			gameOver = true;
-			gameState[cell].Hidden = false;
+			cell.Hidden = false;
 			clearInterval(timer);
 			renderBoard();
-			setTimeout(() => {alert("Game over, you lose!");}, 50);
+			setTimeout(() => {
+				alert("Game over, you lose!");
+			}, 0);
 			return;
-		} else if (gameState[cell].Adjacent !== 0) {
-			if (gameState[cell].Hidden == true) {
-				gameState[cell].Hidden = false;
+		} else if (cell.Adjacent !== 0) {
+			if (cell.Hidden === true) {
+				cell.Hidden = false;
 				revealed++;
 			}
 		} else {
-			blankCluster = blankClusterIdentifier(cell);
+			blankCluster = blankClusterIdentifier(cell.Location);
 			for (const cell in blankCluster) {
-				if (gameState[blankCluster[cell]].Hidden == true) {
+				if (gameState[blankCluster[cell]].Hidden === true) {
 					gameState[blankCluster[cell]].Hidden = false;
 					revealed++;
 				}
@@ -185,10 +188,11 @@ function clickEvent(event, cell) {
 			}
 			clearInterval(timer);
 			renderBoard();
-			setTimeout(() => {alert("Game over, you win!");}, 50);
+			setTimeout(() => {
+				alert("Game over, you win!");
+			}, 0);
 			return;
 		}
-
 	}
 	renderBoard();
 }
@@ -209,10 +213,11 @@ function renderBoard() {
 	var cellCount = 0;
 
 	// add rows/cells
+	var board = document.getElementById("board");
 	for (let i = 0; i < rows; i++) {
 		var row = document.createElement("TR");
 		row.setAttribute("id", "row");
-		document.getElementById("board").appendChild(row);
+		board.appendChild(row);
 
 		for (let j = 0; j < columns; j++) {
 			var cell = document.createElement("TD");
@@ -237,13 +242,13 @@ function renderBoard() {
 // Select display for each cell
 function imageSelector(cellCount, cell) {
 	cellState = gameState[cellCount];
-	if (cellState.Flagged == true) {
+	if (cellState.Flagged === true) {
 		return {src:"MinesweeperImages/flag.png", alt:"Flag"};
-	} else if (cellState.Hidden == true) {
+	} else if (cellState.Hidden === true) {
 		return {src:"MinesweeperImages/hidden.png", alt:"Hidden"};
-	} else if (cellState.Mine == false) {
+	} else if (cellState.Mine === false) {
 		return {src:`MinesweeperImages/${cellState.Adjacent}.png`, alt:"Empty"};
-	} else if (cellState.Mine == true && cellState.Hidden == false) {
+	} else if (cellState.Mine === true && cellState.Hidden === false) {
 		return {src:"MinesweeperImages/bomb.png", alt:"Mine"};
 	}
 }
