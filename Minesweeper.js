@@ -1,3 +1,7 @@
+if (!localStorage) {
+	alert("Game data will not be saved as your browser or device does not support local storage.");
+}
+
 // Initiates game
 function setBoard() {
 	// take user input
@@ -7,7 +11,7 @@ function setBoard() {
 	area = rows * columns;
 
 	// abort if board is invalid
-	if (rows < 1 || columns < 1 || mines < 1) {
+	if (isNaN(rows) || isNaN(columns) || isNaN(mines) || rows < 1 || columns < 1 || mines < 1) {
 		alert("There must be at least one rows, column, and mine");
 		return;
 	} else if (mines > area - 9) {
@@ -21,10 +25,17 @@ function setBoard() {
 	// hide setup options
 	document.getElementById("setup").setAttribute("hidden", "hidden");
 
-	// start tracking
+	// reset tracking
 	revealed = 0;
 	flagged = 0;
 	startTimer();
+	clickCount = 0;
+	metaData = {
+		rows:rows,
+		columns:columns,
+		mines:mines,
+		startTime:Date()
+	};
 
 	// create an array without mines
 	gameState = null;
@@ -46,7 +57,7 @@ function setBoard() {
 
 // Assign mine locations
 function assignMineLocations (cellLocation) {
-	
+
 	// count adjacent cells
 	var guaranteedEmpty = adjacentCellIdentifier(cellLocation);
 
@@ -58,14 +69,13 @@ function assignMineLocations (cellLocation) {
 			mineLocations.set(randomLocation, true);
 		}
 	}
-	mineLocations = Array.from(mineLocations.keys());
+	var mineLocations = Array.from(mineLocations.keys());
 	document.getElementById("mineLocationsDebug").innerHTML = "Location of " + mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
 
 	// add each mine
 	for (const mineLocation of mineLocations) {
 		gameState[mineLocation].Mine = true;
 	}
-
 
 	// Assign adjacent mine count to each empty space
 	for (var i = 0; i < area; i++) {
@@ -128,6 +138,10 @@ function labelBorders(cell) {
 
 // Handle 'reveal' or 'flag' clicks
 function clickEvent(event, cellLocation) {
+	if (clickCount === 0) {
+		assignMineLocations(cellLocation);
+	}
+	clickCount++;
 	var cell = gameState[cellLocation];
 	if (gameOver) {
 		return;
@@ -141,17 +155,9 @@ function clickEvent(event, cellLocation) {
 	if (cell.Flagged || !cell.Hidden) {
 		return;
 	}
-	if (typeof mineLocations == 'undefined') {
-		assignMineLocations(cellLocation);
-	}
 	if (cell.Mine) {
-		gameOver = true;
 		cell.Hidden = false;
-		clearInterval(timer);
-		renderBoard();
-		setTimeout(() => {
-			alert("Game over, you lose!");
-		}, 100);
+		endGame("lose");
 		return;
 	}
 
@@ -192,20 +198,37 @@ function revealEmpty(cell) {
 // check win condition
 function checkWin() {
 	if (revealed >= area - mines) {
-		gameOver = true;
-		for (const mineLocation of mineLocations) {
-			gameState[mineLocation].Flagged = true;
-			flagged++;
-		}
-		clearInterval(timer);
-		renderBoard();
-		setTimeout(() => {
-			alert("Game over, you win!");
-		}, 100);
+		endGame("win");
 		return;
 	} else {
 		renderBoard();
 	}
+}
+
+// end game and store game information in local storage
+function endGame(result) {
+	metaData.result = result;
+	metaData.endTime = Date();
+	metaData.clickCount = clickCount;
+	metaData.correctRevealed = revealed;
+	metaData.flagged = flagged;
+	let gameHistory = JSON.parse(localStorage.getItem("gameHistory") || "[]");
+	gameHistory.push(metaData);
+	localStorage.setItem("gameHistory", JSON.stringify(gameHistory));
+	gameOver = true;
+	if (result === "win") {
+		for (const mineLocation of mineLocations) {
+			if (!gameState[mineLocation].Flagged) {
+				gameState[mineLocation].Flagged = true;
+				flagged++;
+			}
+		}
+	}
+	clearInterval(timer);
+	renderBoard();
+	setTimeout(() => {
+		alert(`Game over, you ${result}!`);
+	}, 100);
 }
 
 // Updates board graphic
@@ -253,13 +276,13 @@ function renderBoard() {
 // Select display for each cell
 function imageSelector(cellCount, cell) {
 	cellState = gameState[cellCount];
-	if (cellState.Flagged === true) {
+	if (cellState.Flagged) {
 		return {src:"MinesweeperImages/flag.png", alt:"Flag"};
-	} else if (cellState.Hidden === true) {
+	} else if (cellState.Hidden) {
 		return {src:"MinesweeperImages/hidden.png", alt:"Hidden"};
-	} else if (cellState.Mine === false) {
+	} else if (!cellState.Mine) {
 		return {src:`MinesweeperImages/${cellState.Adjacent}.png`, alt:"Empty"};
-	} else if (cellState.Mine === true && cellState.Hidden === false) {
+	} else if (cellState.Mine && !cellState.Hidden) {
 		return {src:"MinesweeperImages/bomb.png", alt:"Mine"};
 	}
 }
@@ -284,6 +307,7 @@ function restart() {
 	if (x = document.getElementById("board")) {
 		x.remove();
 	}
+	metaData = {};
 	document.getElementById("setup").removeAttribute("hidden");
 	
 }
@@ -301,6 +325,5 @@ function toggleDebugging() {
 
 // Debugging button
 function test() {
-	console.log(blankCluster.sort(function(a, b){return a - b}));
-
+	console.log(gameState);
 }
