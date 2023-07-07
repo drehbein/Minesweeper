@@ -2,6 +2,23 @@ if (!localStorage) {
 	alert("Game data will not be saved as your browser or device does not support local storage.");
 }
 
+// Loads dashboard
+function loadDashboard() {
+	loadWinrate();
+}
+
+// Loads win rate
+function loadWinrate() {
+	gameHistory = JSON.parse(localStorage.getItem("gameHistory") || "[]");
+	var wins = gameHistory.filter(function(item) {
+		return item.win;
+	}).length;
+	var games = gameHistory.length;
+	console.log(wins);
+	var winRate = "Win rate: " + (wins / games) * 100 + "% (" + wins + " / " + games + ")";
+	document.getElementById("winRate").innerHTML = winRate;
+}
+
 // Initiates game
 function setBoard() {
 	// take user input
@@ -207,7 +224,7 @@ function checkWin() {
 
 // end game and store game information in local storage
 function endGame(result) {
-	metaData.result = result;
+	metaData.win = result === "win";
 	metaData.endTime = Date();
 	metaData.clickCount = clickCount;
 	metaData.correctRevealed = revealed;

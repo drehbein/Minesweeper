@@ -4,8 +4,7 @@
 	<title>Minesweeper</title>
 	<script src="Minesweeper.js"></script>
 </head>
-<body>
-
+<body onload="loadDashboard()">
 	<div id="setup">
 		<label for="rows">Rows:</label><br>
 		<input type="text" id="rows" name="rows" value="9"><br>
@@ -26,6 +25,9 @@
 		<div id="boardCont"></div><br>
 
 		<button type="button" onclick="restart()">Restart</button>
+	</div>
+	<div id="dashboard">
+		<p id="winRate"></p>
 	</div>
 	<br><button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
 	<div id="debugging" hidden="hidden">
