@@ -1,7 +1,6 @@
-Minesweeper ideas:
-
-Can create a global or profile-based displays to show various analyses.
-
-Can incorporate predictive modeling to calculate chance of success based on the current game state (also global or profile-based).
+Default minesweeper difficulties are
+  - Beginner: 8x8 or 9x9 with 10 mines
+  - Intermediate: 16x16 with 40 mines
+  - Expert: 16x30 with 99 mines
 
 Credit for images to nickarocho@GitHub and https://commons.wikimedia.org/wiki/File:Minesweeper_8.svg
