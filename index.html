@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<title>Minesweeper</title>
 	<script src="Minesweeper.js"></script>
 </head>
-
 <body>
 
 	<div id="setup">
@@ -18,7 +16,6 @@
 
 		<button type="button" onclick="setBoard()">Start Game</button>
 	</div>
-
 	<div id="game" hidden="hidden">
 		<p id="revealed"></p>
 
@@ -30,15 +27,12 @@
 
 		<button type="button" onclick="restart()">Restart</button>
 	</div>
-
 	<br><button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
-
 	<div id="debugging" hidden="hidden">
 		<p id="mineLocationsDebug"></p>
 
 		<button type="button" onclick="test()">Test</button>
 		<p id="test"></p>
 	</div>
-
 </body>
 </html>
