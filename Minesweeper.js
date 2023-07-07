@@ -14,8 +14,10 @@ function loadWinrate() {
 		return item.win;
 	}).length;
 	var games = gameHistory.length;
-	console.log(wins);
-	var winRate = "Win rate: " + (wins / games) * 100 + "% (" + wins + " / " + games + ")";
+	var winRate = Math.floor((wins / games) * 100);
+	// replaces NaN with zero
+	winRate = +winRate ? winRate : 0;
+	winRate = "Win rate: " + winRate + "% (" + wins + " / " + games + ")";
 	document.getElementById("winRate").innerHTML = winRate;
 }
 
