@@ -217,9 +217,9 @@ function endGame(result) {
 	localStorage.setItem("gameHistory", JSON.stringify(gameHistory));
 	gameOver = true;
 	if (result === "win") {
-		for (const mineLocation of mineLocations) {
-			if (!gameState[mineLocation].Flagged) {
-				gameState[mineLocation].Flagged = true;
+		for (let cellLocation in gameState) {
+			if (!gameState[cellLocation].Flagged && gameState[cellLocation].Mine) {
+				gameState[cellLocation].Flagged = true;
 				flagged++;
 			}
 		}
