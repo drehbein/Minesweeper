@@ -6,8 +6,17 @@
 	<link rel="stylesheet" href="stylesheet.css">
 	<link rel="icon" type="image/png" href="favicon.ico">
 </head>
-<body onload="loadDashboard()">
-	<div id="setup">
+<body onload="load()">
+	<div id="header" class="header">
+		<h1 onclick="move('mainMenu')">Minesweeper</h1>
+	</div>
+	<div id="mainMenu" class="menu">
+		<button type="button" onclick="move('setup')">Play</button><br>
+		<button type="button" onclick="move('stats')">Stats</button><br>
+		<button type="button" onclick="move('options')">Options</button><br>
+		<button type="button" onclick="move('help')">Help</button><br>
+	</div>
+	<div id="setup" class="menu" hidden="hidden">
 		<label for="rows">Rows:</label><br>
 		<input type="text" id="rows" name="rows" value="9"><br>
 		<label for="columns">Columns:</label><br>
@@ -17,6 +26,14 @@
 
 		<button type="button" onclick="setBoard()">Start Game</button>
 	</div>
+	<div id="stats" class="dashboard" hidden="hidden">
+		<p id="winRate"></p>
+	</div>
+	<div id="options" class="menu" hidden="hidden">
+		<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+	</div>
+	<div id="help" class="menu" hidden="hidden">
+	</div>
 	<div id="game" hidden="hidden">
 		<p id="revealed"></p>
 
@@ -25,18 +42,15 @@
 		<p id="timer"></p>
 
 		<div id="boardCont"></div><br>
-
-		<button type="button" onclick="restart()">Restart</button>
 	</div>
-	<div id="dashboard">
-		<p id="winRate"></p>
+	<div id="endgame" class="popup" hidden="hidden">
 	</div>
-	<br><button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+	<button type="button" onclick="move('mainMenu')">Main Menu</button>
 	<div id="debugging" hidden="hidden">
-		<p id="mineLocationsDebug"></p>
+			<p id="mineLocationsDebug"></p>
 
-		<button type="button" onclick="test()">Test</button>
-		<p id="test"></p>
-	</div>
-</body>
-</html>
+			<button type="button" onclick="test()">Test</button>
+			<p id="test"></p>
+		</div>
+	</body>
+	</html>

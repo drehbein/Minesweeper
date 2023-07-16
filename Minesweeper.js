@@ -2,6 +2,12 @@ if (!localStorage) {
 	alert("Game data will not be saved as your browser or device does not support local storage.");
 }
 
+// Handles loading functions
+function load() {
+	loadDashboard();
+	currentPage = "mainMenu";
+}
+
 // Loads dashboard
 function loadDashboard() {
 	loadWinrate();
@@ -23,6 +29,9 @@ function loadWinrate() {
 
 // Initiates game
 function setBoard() {
+	// Moves to game page
+	move("game");
+
 	// take user input
 	rows = parseInt(document.getElementById("rows").value);
 	columns = parseInt(document.getElementById("columns").value);
@@ -319,16 +328,11 @@ function tick() {
 	document.getElementById("timer").innerHTML = "Time elapsed: " + timeElapsed;
 }
 
-// restart game
-function restart() {
-	document.getElementById("game").setAttribute("hidden", "hidden");
-	clearInterval(timer);
-	if (x = document.getElementById("board")) {
-		x.remove();
-	}
-	metaData = {};
-	document.getElementById("setup").removeAttribute("hidden");
-	
+// Hides the current menu, then shows another
+function move(toShow) {
+	document.getElementById(currentPage).setAttribute("hidden", "hidden");
+	document.getElementById(toShow).removeAttribute("hidden");
+	currentPage = toShow.toString();
 }
 
 // Toggle debugging information
