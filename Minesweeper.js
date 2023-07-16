@@ -27,31 +27,34 @@ function loadWinrate() {
 	document.getElementById("winRate").innerHTML = winRate;
 }
 
-// Initiates game
-function setBoard() {
-	// Moves to game page
-	move("game");
-
+// Initiates custom game
+function initiateCustom() {
 	// take user input
-	rows = parseInt(document.getElementById("rows").value);
-	columns = parseInt(document.getElementById("columns").value);
-	mines = parseInt(document.getElementById("mines").value);
-	area = rows * columns;
+	var rows = parseInt(document.getElementById("rows").value);
+	var columns = parseInt(document.getElementById("columns").value);
+	var mines = parseInt(document.getElementById("mines").value);
 
 	// abort if board is invalid
 	if (isNaN(rows) || isNaN(columns) || isNaN(mines) || rows < 1 || columns < 1 || mines < 1) {
 		alert("There must be at least one rows, column, and mine");
 		return;
-	} else if (mines > area - 9) {
+	} else if (mines > (rows * columns) - 9) {
 		alert("Mine quantity must be at least 9 less than the total area");
 		return;
-	} else if (area > 2000) {
+	} else if ((rows * columns) > 2000) {
 		alert("Area must be 2000 cells or less");
 		return;
 	}
 
-	// hide setup options
-	document.getElementById("setup").setAttribute("hidden", "hidden");
+	initiateGame(rows, columns, mines);
+}
+
+// Initiates game
+function initiateGame(rows, columns, mines) {
+	// Moves to game page
+	move("game");
+
+	area = rows * columns;
 
 	// reset tracking
 	revealed = 0;
@@ -80,7 +83,6 @@ function setBoard() {
 
 	gameOver = false;
 	renderBoard();
-	document.getElementById("game").removeAttribute("hidden");
 }
 
 // Assign mine locations
@@ -91,14 +93,14 @@ function assignMineLocations (cellLocation) {
 
 	// generate mine locations
 	mineLocations = new Map();
-	while (mineLocations.size < mines) {
+	while (mineLocations.size < metaData.mines) {
 		var randomLocation = Math.floor(Math.random() * area);
 		if (!guaranteedEmpty.includes(randomLocation) && cellLocation !== randomLocation) {
 			mineLocations.set(randomLocation, true);
 		}
 	}
 	var mineLocations = Array.from(mineLocations.keys());
-	document.getElementById("mineLocationsDebug").innerHTML = "Location of " + mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
+	document.getElementById("mineLocationsDebug").innerHTML = "Location of " + metaData.mines + " mines: " + mineLocations.sort(function(a, b){return a - b});
 
 	// add each mine
 	for (const mineLocation of mineLocations) {
@@ -133,11 +135,11 @@ function adjacentCellIdentifier (cellLocation) {
 				continue;
 			}
 
-			var newRow = Math.floor(cellLocation / columns) + rowOffset;
-			var newCol = (cellLocation % columns) + colOffset;
+			var newRow = Math.floor(cellLocation / metaData.columns) + rowOffset;
+			var newCol = (cellLocation % metaData.columns) + colOffset;
 
-			if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
-				var adjacentCellLocation = newRow * columns + newCol;
+			if (newRow >= 0 && newRow < metaData.rows && newCol >= 0 && newCol < metaData.columns) {
+				var adjacentCellLocation = newRow * metaData.columns + newCol;
 				adjacentCells.push(adjacentCellLocation);
 			}
 		}
@@ -149,16 +151,16 @@ function adjacentCellIdentifier (cellLocation) {
 // Return border labels
 function labelBorders(cell) {
 	let borders = {};
-	if (cell < columns) {
+	if (cell < metaData.columns) {
 		borders.top = true;
 	}
-	if ((cell + 1) % columns === 0) {
+	if ((cell + 1) % metaData.columns === 0) {
 		borders.right = true;
 	}
-	if (cell + 1 > columns * (rows - 1)) {
+	if (cell + 1 > metaData.columns * (metaData.rows - 1)) {
 		borders.bottom = true;
 	}
-	if (cell % columns === 0) {
+	if (cell % metaData.columns === 0) {
 		borders.left = true;
 	}
 	return borders;
@@ -225,7 +227,7 @@ function revealEmpty(cell) {
 
 // check win condition
 function checkWin() {
-	if (revealed >= area - mines) {
+	if (revealed >= area - metaData.mines) {
 		endGame("win");
 		return;
 	} else {
@@ -276,12 +278,12 @@ function renderBoard() {
 
 	// add rows/cells
 	var board = document.getElementById("board");
-	for (let i = 0; i < rows; i++) {
+	for (let i = 0; i < metaData.rows; i++) {
 		var row = document.createElement("TR");
 		row.setAttribute("id", "row");
 		board.appendChild(row);
 
-		for (let j = 0; j < columns; j++) {
+		for (let j = 0; j < metaData.columns; j++) {
 			var cell = document.createElement("TD");
 			var imageElement = document.createElement("IMG");
 			var imageFile = imageSelector(cellCount, cell);
