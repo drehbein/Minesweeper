@@ -5,54 +5,57 @@
 	<script src="Minesweeper.js"></script>
 	<link rel="stylesheet" href="stylesheet.css">
 	<link rel="icon" type="image/png" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body onload="load()">
 	<div id="header" class="header">
-		<h1 onclick="move('mainMenu')">Minesweeper</h1>
+		<h1 class="logo" onclick="move('mainMenu')">Minesweeper</h1>
 	</div>
-	<div id="mainMenu" class="menu">
-		<button type="button" onclick="move('setup')">Play</button><br>
-		<button type="button" onclick="move('stats')">Stats</button><br>
-		<button type="button" onclick="move('options')">Options</button><br>
-		<button type="button" onclick="move('help')">Help</button><br>
-	</div>
-	<div id="setup" class="menu" hidden="hidden">
-		<button type="button" onclick="initiateGame('8', '8', '10')">Beginner</button><br>
-		<button type="button" onclick="initiateGame('16', '16', '40')">Intermediate</button><br>
-		<button type="button" onclick="initiateGame('16', '30', '99')">Expert</button><br>
-		<button type="button" onclick="initiateCustom()">Custom</button>
-		<label for="rows">Rows:</label>
-		<input type="text" id="rows" name="rows" value="16">
-		<label for="columns">Columns:</label>
-		<input type="text" id="columns" name="columns" value="30">
-		<label for="mines">Mines:</label>
-		<input type="text" id="mines" name="mines" value="99">
-	</div>
-	<div id="stats" class="dashboard" hidden="hidden">
-		<p id="winRate"></p>
-	</div>
-	<div id="options" class="menu" hidden="hidden">
-		<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
-	</div>
-	<div id="help" class="menu" hidden="hidden">
-	</div>
-	<div id="game" hidden="hidden">
-		<p id="revealed"></p>
-
-		<p id="flagged"></p>
-
-		<p id="timer"></p>
-
-		<div id="boardCont"></div><br>
-	</div>
-	<div id="endgame" class="popup" hidden="hidden">
-	</div>
-	<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
-	<div id="debugging" hidden="hidden">
-			<p id="mineLocationsDebug"></p>
-
-			<button type="button" onclick="test()">Test</button>
-			<p id="test"></p>
+	<div id="active" class="active">
+		<div id="mainMenu" class="menu">
+			<button type="button" onclick="move('setup')">Play</button><br>
+			<button type="button" onclick="move('stats')">Stats</button><br>
+			<button type="button" onclick="move('options')">Options</button><br>
+			<button type="button" onclick="move('help')">Help</button><br>
 		</div>
-	</body>
-	</html>
+		<div id="setup" class="menu" hidden="hidden">
+			<button type="button" onclick="initiateGame('8', '8', '10')">Beginner</button><br>
+			<button type="button" onclick="initiateGame('16', '16', '40')">Intermediate</button><br>
+			<button type="button" onclick="initiateGame('16', '30', '99')">Expert</button><br>
+			<button type="button" onclick="initiateCustom()">Custom</button><br>
+			<label for="rows">Rows:</label>
+			<input type="text" id="rows" name="rows" value="16">
+			<label for="columns">Columns:</label>
+			<input type="text" id="columns" name="columns" value="30">
+			<label for="mines">Mines:</label>
+			<input type="text" id="mines" name="mines" value="99">
+			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+		</div>
+		<div id="stats" class="menu" hidden="hidden">
+			<p id="winRate"></p>
+			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+		</div>
+		<div id="options" class="menu" hidden="hidden">
+			<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
+			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+		</div>
+		<div id="help" class="menu" hidden="hidden">
+			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+		</div>
+		<div id="game" class="game" hidden="hidden">
+			<p id="revealed"></p>
+			<p id="flagged"></p>
+			<p id="timer"></p>
+			<div id="boardCont" class=boardCont></div><br>
+			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+		</div>
+		<div id="endgame" class="popup" hidden="hidden">
+		</div>
+	</div>
+	<div id="debugging" hidden="hidden">
+		<p id="mineLocationsDebug"></p>
+		<button type="button" onclick="test()">Test</button>
+		<p id="test"></p>
+	</div>
+</body>
+</html>

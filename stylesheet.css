@@ -1,11 +1,66 @@
-body {
-	background-color: lightgray;
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	background: url(MinesweeperImages/Windows_Background.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.active {
+	margin: auto;
+	width: 75%;
+	height: 90%;
+	background: lightgray;
 }
 
 .header { /* refers to class, not id*/
-	padding: 20px;
 	text-align: center;
-	background: #1abc9c;
+	background: lightgray;
 	color: black;
 	font-size: 30px;
+	padding: 10px 0px;
+	border: 2px solid black;
+}
+
+.menu {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.game {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.boardCont {
+	height: 250px;
+	width: 100%;
+	overflow: auto;
+	background: lightgray;
+}
+
+button {
+	font-size: 20px;
+	height: 50px;
+	width: 200px;
+	background: lightgray;
+	color: black;
+	margin: 5px;
+}
+
+.logo {
+	margin: 0;
 }
