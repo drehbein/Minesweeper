@@ -20,14 +20,13 @@
 		<button type="button" onclick="initiateGame('8', '8', '10')">Beginner</button><br>
 		<button type="button" onclick="initiateGame('16', '16', '40')">Intermediate</button><br>
 		<button type="button" onclick="initiateGame('16', '30', '99')">Expert</button><br>
-		<label for="rows">Rows:</label><br>
-		<input type="text" id="rows" name="rows" value="16"><br>
-		<label for="columns">Columns:</label><br>
-		<input type="text" id="columns" name="columns" value="30"><br>
-		<label for="mines">Mines:</label><br>
-		<input type="text" id="mines" name="mines" value="99"><br><br>
-
 		<button type="button" onclick="initiateCustom()">Custom</button>
+		<label for="rows">Rows:</label>
+		<input type="text" id="rows" name="rows" value="16">
+		<label for="columns">Columns:</label>
+		<input type="text" id="columns" name="columns" value="30">
+		<label for="mines">Mines:</label>
+		<input type="text" id="mines" name="mines" value="99">
 	</div>
 	<div id="stats" class="dashboard" hidden="hidden">
 		<p id="winRate"></p>
@@ -48,7 +47,7 @@
 	</div>
 	<div id="endgame" class="popup" hidden="hidden">
 	</div>
-	<button type="button" onclick="move('mainMenu')">Main Menu</button>
+	<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
 	<div id="debugging" hidden="hidden">
 			<p id="mineLocationsDebug"></p>
 
