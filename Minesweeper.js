@@ -299,7 +299,7 @@ function renderBoard() {
 	}
 
 	// update flagged count
-	document.getElementById("flagged").innerHTML = flagged;
+	document.getElementById("flagged").innerHTML = "Flagged: " + flagged;
 
 }
 
@@ -320,14 +320,14 @@ function imageSelector(cellCount, cell) {
 // start timer
 function startTimer() {
 	timeElapsed = 0;
-	document.getElementById("timer").innerHTML = timeElapsed;
+	document.getElementById("timer").innerHTML = "Time Elapsed: " + timeElapsed;
 	timer = setInterval(tick, 1000);
 }
 
 // maintain timer
 function tick() {
 	timeElapsed++;
-	document.getElementById("timer").innerHTML = timeElapsed;
+	document.getElementById("timer").innerHTML = "Time Elapsed: " + timeElapsed;
 }
 
 // Hides the current menu, then shows another

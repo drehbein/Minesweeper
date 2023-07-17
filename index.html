@@ -44,7 +44,9 @@
 			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="stats" class="menu" hidden="hidden">
-			<p id="winRate"></p>
+			<div class="textContainer">
+				<p id="winRate"></p>
+			</div>
 			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="options" class="menu" hidden="hidden">
@@ -59,10 +61,9 @@
 		</div>
 		<div id="game" class="game" hidden="hidden">
 			<div class="inGameHeader">
-				<span>Flagged:</span>
-				<span id="flagged"></span>
-				<span>Time Elapsed:</span>
-				<span id="timer"></span>
+				<span id="flagged" class="flagged"></span>
+				<span>&ensp;||&ensp;</span>
+				<span id="timer" class="timer"></span>
 			</div>
 			<div id="boardCont" class=boardCont></div>
 			<button type="button" onclick="move('mainMenu')">Main Menu</button>

@@ -59,9 +59,7 @@ input {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	text-align: center;
-	background: lightgray;
 	max-width: 80vw;
-	border: 2px solid black;
 }
 
 .header { /* refers to class, not id*/
@@ -81,11 +79,15 @@ input {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	text-align: center;
+	background: gray;
+	border: 2px solid black;
 }
 
 .game {
 	margin: 0;
 	text-align: center;
+	background: gray;
+	border: 2px solid black;
 }
 
 .boardCont {
@@ -94,6 +96,7 @@ input {
 	overflow: auto;
 	background: lightgray;
 	border: 2px solid black;
+	padding: 10px;
 }
 
 .logo {
@@ -103,6 +106,7 @@ input {
 .inGameHeader {
 	border: 2px solid black;
 	margin: 10px;
+	background: lightgray;
 }
 
 .textContainer {
