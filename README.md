@@ -1,6 +1,6 @@
 Instructions:
 
-Minesweeper is a puzzle game where players explore a grid, attempt to identify empty cells without digging up a mine. Left click to reveal a cell. (No pressure, first one's a freebie!) cells without mines are either blank or have a number, denoting how many mines are in the eight adjacent cells. If you suspect a mine's location, shift+click to flag it. This prevents accidentally revealing a mine. To remove a flag, shift-click it. Once all empty cells are identified, you win! But watch out. Revealing a mine, is an instant loss!
+Minesweeper is a puzzle game where players explore a grid, attempt to identify empty cells without digging up a mine. Left click to reveal a cell. (No pressure, first one's a freebie!) cells without mines are either blank or have a number, denoting how many mines are in the eight adjacent cells. If you suspect a mine's location, shift+click to flag it. This prevents accidentally revealing a mine. To remove a flag, shift-click it. Once all empty cells are identified, you win! But watch out. Revealing a mine is an instant loss!
 
 Default minesweeper difficulties:
   - Beginner: 8x8 with 10 mines
