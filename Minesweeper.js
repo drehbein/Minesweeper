@@ -238,6 +238,7 @@ function checkWin() {
 
 // end game and store game information in local storage
 function endGame(result) {
+	clearInterval(timer);
 	metaData.win = result === "win";
 	metaData.endTime = Date();
 	metaData.clickCount = clickCount;
@@ -288,7 +289,7 @@ function renderBoard() {
 			var imageElement = document.createElement("IMG");
 			var imageFile = imageSelector(cellCount, cell);
 			imageElement.setAttribute("src", imageFile.src);
-			imageElement.setAttribute("style", "width:50px;height:50px;");
+			imageElement.setAttribute("style", "width:30px;height:30px;");
 			imageElement.setAttribute("alt", imageFile.alt);
 			imageElement.setAttribute("onclick", `clickEvent(event, ${cellCount})`);
 			cell.appendChild(imageElement);
@@ -298,7 +299,7 @@ function renderBoard() {
 	}
 
 	// update flagged count
-	document.getElementById("flagged").innerHTML = "Flagged: " + flagged;
+	document.getElementById("flagged").innerHTML = flagged;
 
 }
 
@@ -319,14 +320,14 @@ function imageSelector(cellCount, cell) {
 // start timer
 function startTimer() {
 	timeElapsed = 0;
-	document.getElementById("timer").innerHTML = "Time elapsed: " + timeElapsed;
+	document.getElementById("timer").innerHTML = timeElapsed;
 	timer = setInterval(tick, 1000);
 }
 
 // maintain timer
 function tick() {
 	timeElapsed++;
-	document.getElementById("timer").innerHTML = "Time elapsed: " + timeElapsed;
+	document.getElementById("timer").innerHTML = timeElapsed;
 }
 
 // Hides the current menu, then shows another
