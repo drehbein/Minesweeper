@@ -59,6 +59,7 @@ function initiateGame(rows, columns, mines) {
 	// reset tracking
 	revealed = 0;
 	flagged = 0;
+	clearInterval(timer);
 	startTimer();
 	clickCount = 0;
 	metaData = {
@@ -254,7 +255,6 @@ function endGame(result) {
 			}
 		}
 	}
-	clearInterval(timer);
 	renderBoard();
 	setTimeout(() => {
 		alert(`Game over, you ${result}!`);

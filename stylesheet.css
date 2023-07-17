@@ -11,6 +11,43 @@ html {
 	background-size: cover;
 }
 
+button {
+	font-size: 20px;
+	height: 50px;
+	width: 200px;
+	background: lightgray;
+	color: black;
+	margin: 5px;
+}
+
+label {
+	font-size: 20px;
+	height: 50px;
+	width: 84px;
+	background: lightgray;
+	color: black;
+}
+
+input {
+	width: 94px;
+	height: 22px;
+	padding: 0;
+	float: right;
+	text-align: center;
+}
+
+.userInput {
+	margin: 5px;
+	width:200;
+}
+
+.userInputList {
+	margin: 5px;
+	width: 196px;
+	background: lightgray;
+	border: 2px solid black;
+}
+
 .active {
 	margin: auto;
 	width: 75%;
@@ -50,15 +87,6 @@ html {
 	width: 100%;
 	overflow: auto;
 	background: lightgray;
-}
-
-button {
-	font-size: 20px;
-	height: 50px;
-	width: 200px;
-	background: lightgray;
-	color: black;
-	margin: 5px;
 }
 
 .logo {
