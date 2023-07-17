@@ -17,7 +17,8 @@ button {
 	width: 200px;
 	background: lightgray;
 	color: black;
-	margin: 5px;
+	margin: 10px 5px;
+	border: 2px solid black;
 }
 
 label {
@@ -26,6 +27,10 @@ label {
 	width: 84px;
 	background: lightgray;
 	color: black;
+}
+
+span {
+	font-size: 20px;
 }
 
 input {
@@ -56,6 +61,7 @@ input {
 	text-align: center;
 	background: lightgray;
 	max-width: 80vw;
+	border: 2px solid black;
 }
 
 .header { /* refers to class, not id*/
@@ -84,11 +90,17 @@ input {
 
 .boardCont {
 	margin: 10px;
-	height: 50vh;
+	max-height: 50vh;
 	overflow: auto;
 	background: lightgray;
+	border: 2px solid black;
 }
 
 .logo {
 	margin: 0;
+}
+
+.inGameHeader {
+	border: 2px solid black;
+	margin: 10px;
 }

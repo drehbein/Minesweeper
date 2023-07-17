@@ -13,17 +13,17 @@
 	</div>
 	<div id="active" class="active">
 		<div id="mainMenu" class="menu">
-			<button type="button" onclick="move('setup')">Play</button><br>
-			<button type="button" onclick="move('stats')">Stats</button><br>
-			<button type="button" onclick="move('options')">Options</button><br>
-			<button type="button" onclick="move('help')">Help</button><br>
+			<button type="button" onclick="move('setup')">Play</button>
+			<button type="button" onclick="move('stats')">Stats</button>
+			<button type="button" onclick="move('options')">Options</button>
+			<button type="button" onclick="move('help')">Help</button>
 		</div>
 		<div id="setup" class="menu" hidden="hidden">
-			<button type="button" onclick="initiateGame('8', '8', '10')">Beginner</button><br>
-			<button type="button" onclick="initiateGame('16', '16', '40')">Intermediate</button><br>
-			<button type="button" onclick="initiateGame('16', '30', '99')">Expert</button><br>
-			<button type="button" onclick="move('setupCustom')">Custom</button><br>
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="initiateGame('8', '8', '10')">Beginner</button>
+			<button type="button" onclick="initiateGame('16', '16', '40')">Intermediate</button>
+			<button type="button" onclick="initiateGame('16', '30', '99')">Expert</button>
+			<button type="button" onclick="move('setupCustom')">Custom</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="setupCustom" class="menu" hidden="hidden">
 			<div class="userInputList">
@@ -40,27 +40,29 @@
 					<input type="text" id="mines" name="mines" value="99">
 				</div>
 			</div>
-			<button type="button" onclick="initiateCustom()">Start Game</button><br>
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="initiateCustom()">Start Game</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="stats" class="menu" hidden="hidden">
 			<p id="winRate"></p>
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="options" class="menu" hidden="hidden">
 			<button type="button" onclick="toggleDebugging()">Toggle Debugging</button>
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="help" class="menu" hidden="hidden">
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="game" class="game" hidden="hidden">
-			<label for="flagged">Flagged:</label>
-			<span id="flagged"></span>
-			<label for="timer">Time Elapsed:</label>
-			<span id="timer"></span>
+			<div class="inGameHeader">
+				<label for="flagged">Flagged:</label>
+				<span id="flagged"></span>
+				<label for="timer">Time Elapsed:</label>
+				<span id="timer"></span>
+			</div>
 			<div id="boardCont" class=boardCont></div>
-			<br><button type="button" onclick="move('mainMenu')">Main Menu</button>
+			<button type="button" onclick="move('mainMenu')">Main Menu</button>
 		</div>
 		<div id="endgame" class="popup" hidden="hidden">
 		</div>
