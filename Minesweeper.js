@@ -297,8 +297,7 @@ function renderBoard() {
 		}
 	}
 
-	// update revealed count
-	document.getElementById("revealed").innerHTML = "Revealed: " + revealed;
+	// update flagged count
 	document.getElementById("flagged").innerHTML = "Flagged: " + flagged;
 
 }
