@@ -177,7 +177,7 @@ function clickEvent(event, cellLocation) {
 	if (gameOver) {
 		return;
 	}
-	if (event.shiftKey && cell.Hidden) {
+	if ((event.shiftKey || event.button === 2) && cell.Hidden) {
 		cell.Flagged = !cell.Flagged;
 		flagged += cell.Flagged ? 1 : -1;
 		renderBoard();
@@ -292,6 +292,8 @@ function renderBoard() {
 			imageElement.setAttribute("style", "width:30px;height:30px;");
 			imageElement.setAttribute("alt", imageFile.alt);
 			imageElement.setAttribute("onclick", `clickEvent(event, ${cellCount})`);
+			imageElement.setAttribute("oncontextmenu", `clickEvent(event, ${cellCount})`);
+			imageElement.addEventListener("contextmenu", (event) => { event.preventDefault(); });
 			cell.appendChild(imageElement);
 			row.appendChild(cell);
 			cellCount++;
