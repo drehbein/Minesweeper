@@ -177,7 +177,7 @@ function clickEvent(event, cellLocation) {
 	if (gameOver) {
 		return;
 	}
-	if ((event.shiftKey || event.button === 2) && cell.Hidden) {
+	if ((event.shiftKey || event.button === 2 || event.button === -1) && cell.Hidden) {
 		cell.Flagged = !cell.Flagged;
 		flagged += cell.Flagged ? 1 : -1;
 		renderBoard();
