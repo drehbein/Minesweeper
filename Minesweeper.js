@@ -169,7 +169,7 @@ function labelBorders(cell) {
 
 // Handle 'reveal' or 'flag' clicks
 function clickEvent(event, cellLocation) {
-	if (clickCount === 0) {
+	if (clickCount === 0) { // Start game
 		assignMineLocations(cellLocation);
 	}
 	clickCount++;
@@ -177,21 +177,40 @@ function clickEvent(event, cellLocation) {
 	if (gameOver) {
 		return;
 	}
-	if ((event.shiftKey || event.button === 2 || event.button === -1) && cell.Hidden) {
+	if ((event.shiftKey || event.button === 2 || event.button === -1) && cell.Hidden) { // Flagging
 		cell.Flagged = !cell.Flagged;
 		flagged += cell.Flagged ? 1 : -1;
 		renderBoard();
 		return;
 	}
-	if (cell.Flagged || !cell.Hidden) {
+	if (cell.Flagged) { // Unproductive click
 		return;
 	}
-	if (cell.Mine) {
+	if (cell.Mine) { // Reveal mine
 		cell.Hidden = false;
 		endGame("lose");
 		return;
 	}
+	if (!cell.Hidden) { // Chording
+		var adjacentCells = adjacentCellIdentifier(cell.Location);
+		var adjacentFlagged = 0;
+		for (let i = 0; i < adjacentCells.length; i++) {
+			if (gameState[adjacentCells[i]].Flagged === true) {
+				adjacentFlagged++;
+			}
+		}
+		if (cell.Adjacent === adjacentFlagged) {
+			for (let i = 0; i < adjacentCells.length; i++) {
+				if (gameState[adjacentCells[i]].Flagged === false) {
+					revealEmpty(gameState[adjacentCells[i]]);
+				}
+			}
+		}
+		checkWin();
+		return;
+	}
 
+	// Else reveal empty cell
 	revealEmpty(cell);
 
 	checkWin();
