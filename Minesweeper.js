@@ -309,11 +309,11 @@ function renderBoard() {
 function imageSelector(cellCount, cell) {
 	cellState = gameState[cellCount];
 	if (cellState.Flagged) {
-		return {src:"MinesweeperImages/flag.png", alt:"Flag"};
+		return {src:"MinesweeperImages/flag.svg", alt:"Flag"};
 	} else if (cellState.Hidden) {
-		return {src:"MinesweeperImages/hidden.png", alt:"Hidden"};
+		return {src:"MinesweeperImages/hidden.svg", alt:"Hidden"};
 	} else if (!cellState.Mine) {
-		return {src:`MinesweeperImages/${cellState.Adjacent}.png`, alt:"Empty"};
+		return {src:`MinesweeperImages/${cellState.Adjacent}.svg`, alt:"Empty"};
 	} else if (cellState.Mine && !cellState.Hidden) {
 		return {src:"MinesweeperImages/bomb.png", alt:"Mine"};
 	}
