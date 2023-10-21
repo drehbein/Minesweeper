@@ -7,4 +7,4 @@ Default minesweeper difficulties:
   - Intermediate: 16x16 with 40 mines
   - Expert: 16x30 with 99 mines
 
-Credit for images to nickarocho@GitHub and https://commons.wikimedia.org/wiki/File:Minesweeper_8.svg and https://commons.wikimedia.org/wiki/File:Magnifying_glass_Icon.png [test]
+Credit for images to nickarocho@GitHub and https://commons.wikimedia.org/wiki/File:Minesweeper_8.svg and https://commons.wikimedia.org/wiki/File:Magnifying_glass_Icon.png
